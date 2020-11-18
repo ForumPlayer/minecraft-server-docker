@@ -5,6 +5,7 @@ EXPOSE 25565/tcp
 EXPOSE 25565/udp
 
 WORKDIR /minecraft
+VOLUME /minecraft
 
 RUN apt update && apt-get upgrade -y
 RUN apt install -y wget zip bash-completion git htop nano psmisc screen
