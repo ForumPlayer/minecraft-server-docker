@@ -1,4 +1,4 @@
-FROM debian:buster-slim
+FROM openjdk:slim-buster
 LABEL maintainer="ForumPlayer"
 
 EXPOSE 25565/tcp
@@ -7,14 +7,10 @@ EXPOSE 25565/udp
 WORKDIR /minecraft
 VOLUME /minecraft
 
-RUN apt update && apt-get upgrade -y
-RUN apt install -y wget zip bash-completion git htop nano psmisc screen
+RUN apt update && apt install -y wget 
 
-RUN mkdir -p /usr/share/man/man1
-RUN apt install -y default-jre-headless
-
-COPY . .
-RUN chmod +x run.sh
+COPY eula.txt .
 RUN wget https://papermc.io/ci/job/Paper-1.16/lastSuccessfulBuild/artifact/paperclip.jar
 
-CMD ["/minecraft/run.sh"]
+ENTRYPOINT ["sh", "-c"]
+CMD ["java -Xms1G -Xmx1G -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true -jar paperclip.jar nogui"]
