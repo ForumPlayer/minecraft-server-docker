@@ -7,7 +7,7 @@ EXPOSE 25565/udp
 WORKDIR /minecraft
 VOLUME /minecraft
 
-RUN apt update && apt install -y wget 
+RUN apt update && apt install -y wget nano
 
 COPY eula.txt .
 RUN wget https://papermc.io/ci/job/Paper-1.16/lastSuccessfulBuild/artifact/paperclip.jar
